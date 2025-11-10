@@ -12,7 +12,7 @@ app.get('/ping', (req, res) => {
 // create a route, in postman we can test it by hitting localhost:3000/ping, and get response 'hello pong'.
 // we are using json format to send the response.
 
-app.get('/tweets', (req, res) => {
+app.post('/tweets', (req, res) => {
     return res.json({
         tweets: [
             {
