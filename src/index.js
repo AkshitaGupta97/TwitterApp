@@ -1,8 +1,13 @@
 
 import express from 'express';
-
+import morgan from 'morgan';
 // create new app server
 const app = express();
+app.use(morgan('combined')); // logging middleware, combined is a predefined format string
+
+app.use(express.json());
+app.use(express.text()); // middleware to parse text request body
+app.use(express.urlencoded()); // needed to parse urlencoded request body
 
 // middleware to parse json request body
 
@@ -19,6 +24,14 @@ function mid3(req,res,next){
     next();
 }
 
+// common middleware for all routes
+function commonMiddleWare(req,res,next){
+    console.log("this is common middleware for all routes");
+    next();
+}
+
+app.use(commonMiddleWare); // applying common middleware to all routes
+
 const middleware = [mid1, mid2, mid3]
 
 // mid1 is a middleware function that logs a message for every request.
@@ -33,6 +46,9 @@ app.get('/ping', middleware,  (req, res) => {
 // we are using json format to send the response.
 
 app.post('/tweets', middleware , (req, res) => {
+    console.log("creating a tweet", req.query);  // req.query contains the query parameters sent in the request
+    console.log("request body is ", req.body); // req.body contains the request body sent in the request
+
     return res.json({
         tweets: [
             {
@@ -47,6 +63,21 @@ app.post('/tweets', middleware , (req, res) => {
     })
 })
 
+app.get('/twiter/:tweetId/comments/:commentId', (req,res) => {
+    console.log("fetching a specific tweet", req.params); // req.params contains the route parameters
+    console.log("tweet id is ", req.params.tweetId);
+    console.log("comment id is ", req.params.commentId);
+    return res.json({
+        message: `fetching tweet with id ${req.params.tweetId}`
+    })
+})
+
+// if any of the request are not found then
+app.all('*', (req,res) => {
+    return res.status(404).json({
+        message: "resource not found"
+    })
+})
 // create a port and connect it to express app
 app.listen(3000, () => {
     console.log('server is running on port 3000');
