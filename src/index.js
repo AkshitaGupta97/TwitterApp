@@ -1,8 +1,11 @@
 
 import express from 'express';
 import morgan from 'morgan';
-import { PORT } from './config/serverConfig';
-import tweetRouter from './routes/tweet.js';
+import { PORT } from './config/serverConfig.js';
+//import tweetRouter from './routes/tweet.js';
+import apiRouter from './routes/apiRoutes.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 //import path from 'path';
 //import {fileURLToPath} from 'url';
 
@@ -13,18 +16,24 @@ app.use(morgan('combined')); // logging middleware, combined is a predefined for
 
 app.use(express.json());
 app.use(express.text()); // middleware to parse text request body
-app.use(express.urlencoded()); // needed to parse urlencoded request body
+app.use(express.urlencoded({ extended: true })); // needed to parse urlencoded request body
 
 app.set('view engine', 'ejs'); // setting ejs as the view engine
 
-//const __filename = fileURLToPath(import.meta.url);
-//const __dirname = path.dirname(__filename);
-
 //app.set('views', path.join(__dirname, '/views')); // setting the views directory
 
-app.set('views', import.meta.dirname + '/views'); // setting the views directory
+// compute __dirname equivalent for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.set('views', path.join(__dirname, 'views')); // setting the views directory
 
 // route to render ejs template
+
+
+//app.use('/tweets', tweetRouter); // using tweet router for /tweets route  (localhost:3000/tweets) -> tweetRouter is used here
+
+app.use('/api', apiRouter); // using apiRouter for /api route
 
 app.get('/', (req, res) => {
     res.render('home', {name: 'Twitter User'});
@@ -49,8 +58,6 @@ function commonMiddleWare(req,res,next){
     console.log("this is common middleware for all routes");
     next();
 }
-
-app.use('/tweets', tweetRouter); // using tweet router for /tweets route  (localhost:3000/tweets) -> tweetRouter is used here
 
 app.use(commonMiddleWare); // applying common middleware to all routes
 
@@ -102,5 +109,5 @@ app.all('*', (req,res) => {
 })
 // create a port and connect it to express app
 app.listen(PORT, () => {
-    console.log('server is running on port 3000');
-})
+    console.log(`server is running on port ${PORT}`);
+});
