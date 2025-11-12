@@ -1,4 +1,3 @@
-
 import express from 'express';
 
 const router = express.Router(); // create a new router OBJECT
@@ -14,7 +13,5 @@ router.get('/:id', (req,res) => {
         message: `fetching tweet with id ${req.params.id}`
     })
 })
-
-
 
 export default router;

@@ -92,8 +92,8 @@ app.post('/twts', middleware , (req, res) => {
     })
 })
 
-app.get('/twiter/:tweetId/comments/:commentId', (req,res) => {
-    console.log("fetching a specific tweet", req.params); // req.params contains the route parameters
+app.get('/twitter/:tweetId/comments/:commentId', (req,res) => {
+   // console.log("fetching a specific tweet", req.params); // req.params contains the route parameters
     console.log("tweet id is ", req.params.tweetId);
     console.log("comment id is ", req.params.commentId);
     return res.json({
@@ -102,7 +102,7 @@ app.get('/twiter/:tweetId/comments/:commentId', (req,res) => {
 })
 
 // if any of the request are not found then
-app.all('*', (req,res) => {
+app.use((req, res) => {
     return res.status(404).json({
         message: "resource not found"
     })
