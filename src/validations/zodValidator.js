@@ -4,6 +4,7 @@ import { EventEmitter } from 'events';
 EventEmitter.defaultMaxListeners = 20;
 
 const zodValidate = (schema) => {
+    // returns a middle ware
     return async (req, res, next) => {
         try {
             console.log("request body is :- ", req.body);
