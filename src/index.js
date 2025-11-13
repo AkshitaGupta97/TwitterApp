@@ -6,6 +6,8 @@ import { PORT } from './config/serverConfig.js';
 import apiRouter from './routes/apiRoutes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import connectDB from './config/dbConfig.js';
+
 //import path from 'path';
 //import {fileURLToPath} from 'url';
 
@@ -110,4 +112,5 @@ app.use((req, res) => {
 // create a port and connect it to express app
 app.listen(PORT, () => {
     console.log(`server is running on port ${PORT}`);
+    connectDB();
 });
