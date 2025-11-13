@@ -1,6 +1,7 @@
 import express from 'express';
 import { createTweet, tweetController, tweetControllerID } from '../../../controllers/tweetController.js';
 import { createTweetManualValidator } from '../../../validations/tweetManualValidator.js';
+import zodValidator from '../../../validations/zodValidator.js';
 
 const router = express.Router(); // create a new router OBJECT
 
@@ -8,6 +9,7 @@ router.get('/', tweetController)
 
 router.get('/:id', tweetControllerID)
 
-router.post('/', createTweetManualValidator, createTweet)
+//router.post('/create', createTweetManualValidator, createTweet) or for auto-validation
+router.post('/create', zodValidator(tweetSchema), createTweet )
 
 export default router;
